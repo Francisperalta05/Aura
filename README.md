@@ -1,6 +1,6 @@
-# Gestor de tareas (Flutter)
+# Aura
 
-Aplicación sencilla para gestionar tareas personales, hecha como prueba práctica de Flutter.
+Gestor de tareas en Flutter: aplicación sencilla para gestionar tareas personales, hecha como prueba práctica de Flutter.
 
 > Estado: **en desarrollo**. Este README se actualiza a medida que avanza el trabajo.
 
