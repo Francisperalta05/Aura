@@ -4,7 +4,7 @@ Aura es una aplicación móvil en Flutter para gestionar tareas personales: anot
 
 ## Funcionalidades
 
-- **Lista de tareas:** al abrir la app aparecen unas tareas de ejemplo.
+- **Lista de tareas:** la app empieza vacía y cada usuario crea sus propias tareas.
 - **Agregar tareas:** se hace desde un diálogo.
   - Si el título está vacío o tiene solo espacios, muestra un error y no guarda la tarea.
   - El título se guarda sin los espacios sobrantes.
@@ -13,10 +13,10 @@ Aura es una aplicación móvil en Flutter para gestionar tareas personales: anot
   - Para editar se usa el mismo diálogo que para crear, con la misma validación del título.
   - Al eliminar, un aviso confirma qué tarea se borró.
 - **Filtros:** Todas, Pendientes y Completadas, cada uno con su propio mensaje cuando no tiene tareas.
-- **Tema:** claro u oscuro, según la configuración del sistema.
+- **Diseño propio:** colores cálidos, tipografía Figtree, tarjetas sin bordes y selector de filtros tipo pista. Solo tiene modo claro.
 - **Idiomas:** español e inglés, según el idioma del dispositivo. Si el dispositivo usa otro idioma, la app se muestra en inglés.
 
-Las tareas se guardan en memoria, así que al cerrar la app se vuelve a los ejemplos iniciales.
+Las tareas se guardan en memoria, así que se pierden al cerrar la app.
 
 ## Instalación
 
@@ -87,7 +87,7 @@ flutter analyze
   - Eliminar tareas.
   - Los filtros.
 - `test/tasks_page_test.dart` cubre la interfaz:
-  - Las tareas de ejemplo al abrir.
+  - Que la app arranca vacía.
   - Agregar una tarea desde el diálogo.
   - El error del título.
   - Editar y eliminar desde el menú de la tarea.
@@ -101,8 +101,8 @@ El estado se maneja con **Bloc** (`flutter_bloc`). Las demás dependencias son `
 | Capa | Contenido |
 |---|---|
 | `domain/` | La entidad `Task`, el enum `TaskFilter` y el contrato `TaskRepository`. Es Dart puro, sin Flutter. |
-| `data/` | `InMemoryTaskRepository`, que guarda las tareas en memoria e incluye los ejemplos iniciales. |
-| `presentation/` | `TasksBloc` (eventos y estado), la pantalla principal y sus widgets. |
+| `data/` | `InMemoryTaskRepository`, que guarda las tareas en memoria. |
+| `presentation/` | `TasksBloc` (eventos y estado), la pantalla principal, sus widgets y el tema. |
 
 ```
 Widget ──evento──▶ TasksBloc ──llama──▶ TaskRepository (en memoria)
@@ -118,7 +118,9 @@ Widget ──evento──▶ TasksBloc ──llama──▶ TaskRepository (en m
 - **La validación del título vive en un solo lugar.** Está en `Task.isValidTitle` y se aplica dos veces: el formulario muestra el error y el Bloc descarta cualquier título no válido, tanto al crear como al editar.
 - **Un solo diálogo para crear y editar** (`TaskTitleDialog`). Si recibe un título inicial, se comporta como edición.
 - **Todos los textos salen de `AppLocalizations`.** Se generan con `gen-l10n` a partir de los archivos `.arb` de `lib/l10n/`. El español (`app_es.arb`) es la plantilla y lleva la descripción de cada texto.
-- **Las tareas de ejemplo también se traducen.** Se crean al arrancar en `lib/sample_tasks.dart`, con el mismo idioma que elige `MaterialApp`. Así la capa `data/` no depende de las traducciones.
+- **El diseño vive en un solo archivo de tema** (`presentation/theme/aura_theme.dart`). Ahí están los colores, la tipografía y el estilo de botones, campos, diálogos, menús y avisos. Los widgets toman los colores de `Theme.of(context)` y no tienen valores sueltos.
+- **Componentes propios solo donde Material no llega.** Son tres: el selector de filtros (`SegmentedButton` no permite píldoras separadas con sombra), la tarjeta de tarea (sombra doble y resaltado mientras su menú está abierto) y el borde del campo de texto, que mantiene la etiqueta dentro del campo relleno.
+- **La fuente Figtree va incluida en `assets/fonts/`**, con su licencia OFL. Así la app no descarga nada al arrancar.
 - **Editar y eliminar desde un menú** en cada tarea, en lugar de gestos como deslizar. Así son fáciles de descubrir y tocar la casilla sigue sirviendo solo para completar.
 - **Las tareas nuevas aparecen al principio de la lista.** Si se agrega una con el filtro «Completadas» activo, la app cambia a «Todas» para que la tarea nueva se vea.
 
@@ -126,10 +128,10 @@ Widget ──evento──▶ TasksBloc ──llama──▶ TaskRepository (en m
 
 ```
 l10n.yaml                            configuración de gen-l10n
+assets/fonts/                        fuente Figtree y su licencia (OFL)
 lib/
   main.dart                          crea el repositorio y arranca la app
   app.dart                           MaterialApp, tema, idiomas y BlocProvider
-  sample_tasks.dart                  tareas de ejemplo traducidas
   l10n/
     app_es.arb                       textos en español (plantilla)
     app_en.arb                       textos en inglés
@@ -138,13 +140,15 @@ lib/
     task_filter.dart                 enum TaskFilter
     task_repository.dart             contrato del repositorio
   data/
-    in_memory_task_repository.dart   implementación en memoria con los ejemplos
+    in_memory_task_repository.dart   implementación en memoria
   presentation/
     bloc/
       tasks_bloc.dart
       tasks_event.dart
       tasks_state.dart
     tasks_page.dart                  pantalla principal
+    theme/
+      aura_theme.dart                colores, tipografía y estilo de los componentes
     widgets/
       task_filter_bar.dart           filtros Todas / Pendientes / Completadas
       task_tile.dart                 una tarea con su casilla y su menú
@@ -165,5 +169,5 @@ test/
 
 - Las tareas no se guardan entre sesiones.
 - Eliminar una tarea no se puede deshacer.
-- Las tareas de ejemplo se crean en el idioma que tiene el dispositivo al abrir la app. Si se cambia el idioma con la app abierta, la interfaz se traduce pero las tareas no, porque ya son datos del usuario.
+- No hay modo oscuro: la app siempre usa el tema claro.
 - Solo hay configuración para Android e iOS.

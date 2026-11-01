@@ -27,10 +27,5 @@
   "taskOptionsTooltip": "Task options",
   "editAction": "Edit",
   "deleteAction": "Delete",
-  "taskDeletedMessage": "Deleted “{title}”.",
-
-  "sampleTask1": "Prepare Monday's presentation",
-  "sampleTask2": "Buy bread and milk",
-  "sampleTask3": "Go for a 30-minute walk",
-  "sampleTask4": "Pay the electricity bill"
+  "taskDeletedMessage": "Deleted “{title}”."
 }

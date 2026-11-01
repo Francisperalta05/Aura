@@ -1,8 +1,6 @@
 import 'package:aura/app.dart';
 import 'package:aura/data/in_memory_task_repository.dart';
 import 'package:aura/domain/task.dart';
-import 'package:aura/l10n/app_localizations.dart';
-import 'package:aura/sample_tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -21,15 +19,13 @@ Future<void> pumpApp(
 }
 
 void main() {
-  testWidgets('muestra las tareas de ejemplo al abrir', (tester) async {
-    final sampleTasks = buildSampleTasks(
-      lookupAppLocalizations(const Locale('es')),
-    );
-    await pumpApp(tester, tasks: sampleTasks);
+  testWidgets('arranca sin tareas y muestra el mensaje de vacío', (
+    tester,
+  ) async {
+    await tester.pumpWidget(AuraApp(taskRepository: InMemoryTaskRepository()));
 
-    for (final task in sampleTasks) {
-      expect(find.text(task.title), findsOneWidget);
-    }
+    expect(find.byType(Checkbox), findsNothing);
+    expect(find.byType(FloatingActionButton), findsOneWidget);
   });
 
   testWidgets('usa inglés si el dispositivo está en inglés', (tester) async {
@@ -71,7 +67,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.text('Escribe un título para la tarea.'), findsOneWidget);
-    expect(find.byType(AlertDialog), findsOneWidget);
+    expect(find.byType(Dialog), findsOneWidget);
   });
 
   testWidgets('edita una tarea desde su menú', (tester) async {

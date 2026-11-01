@@ -5,6 +5,7 @@ import 'domain/task_repository.dart';
 import 'l10n/app_localizations.dart';
 import 'presentation/bloc/tasks_bloc.dart';
 import 'presentation/tasks_page.dart';
+import 'presentation/theme/aura_theme.dart';
 
 class AuraApp extends StatelessWidget {
   const AuraApp({super.key, required this.taskRepository});
@@ -20,11 +21,7 @@ class AuraApp extends StatelessWidget {
         localizationsDelegates: AppLocalizations.localizationsDelegates,
         supportedLocales: AppLocalizations.supportedLocales,
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(colorSchemeSeed: Colors.indigo),
-        darkTheme: ThemeData(
-          colorSchemeSeed: Colors.indigo,
-          brightness: Brightness.dark,
-        ),
+        theme: AuraTheme.light(),
         home: const TasksPage(),
       ),
     );

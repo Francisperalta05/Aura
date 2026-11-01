@@ -102,22 +102,5 @@
         "example": "Comprar pan"
       }
     }
-  },
-
-  "sampleTask1": "Preparar la presentación del lunes",
-  "@sampleTask1": {
-    "description": "Tarea de ejemplo."
-  },
-  "sampleTask2": "Comprar pan y leche",
-  "@sampleTask2": {
-    "description": "Tarea de ejemplo."
-  },
-  "sampleTask3": "Salir a caminar 30 minutos",
-  "@sampleTask3": {
-    "description": "Tarea de ejemplo."
-  },
-  "sampleTask4": "Pagar la factura de la luz",
-  "@sampleTask4": {
-    "description": "Tarea de ejemplo, ya completada."
   }
 }
