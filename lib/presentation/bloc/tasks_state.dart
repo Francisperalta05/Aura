@@ -13,7 +13,10 @@ class TasksState {
   List<Task> get visibleTasks => tasks.where(filter.matches).toList();
 
   TasksState copyWith({List<Task>? tasks, TaskFilter? filter}) {
-    return TasksState(tasks: tasks ?? this.tasks, filter: filter ?? this.filter);
+    return TasksState(
+      tasks: tasks ?? this.tasks,
+      filter: filter ?? this.filter,
+    );
   }
 
   @override

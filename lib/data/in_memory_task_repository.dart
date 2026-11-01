@@ -11,7 +11,11 @@ class InMemoryTaskRepository implements TaskRepository {
     Task(id: 'sample-1', title: 'Preparar la presentación del lunes'),
     Task(id: 'sample-2', title: 'Comprar pan y leche'),
     Task(id: 'sample-3', title: 'Salir a caminar 30 minutos'),
-    Task(id: 'sample-4', title: 'Pagar la factura de la luz', isCompleted: true),
+    Task(
+      id: 'sample-4',
+      title: 'Pagar la factura de la luz',
+      isCompleted: true,
+    ),
   ];
 
   final List<Task> _tasks;
