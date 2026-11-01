@@ -14,6 +14,7 @@ Aura es una aplicación móvil en Flutter para gestionar tareas personales: anot
   - Al eliminar, un aviso confirma qué tarea se borró.
 - **Filtros:** Todas, Pendientes y Completadas, cada uno con su propio mensaje cuando no tiene tareas.
 - **Tema:** claro u oscuro, según la configuración del sistema.
+- **Idiomas:** español e inglés, según el idioma del dispositivo. Si el dispositivo usa otro idioma, la app se muestra en inglés.
 
 Las tareas se guardan en memoria, así que al cerrar la app se vuelve a los ejemplos iniciales.
 
@@ -48,6 +49,8 @@ flutter doctor
    ```bash
    flutter pub get
    ```
+
+   Este paso también genera las clases de traducción (`lib/l10n/app_localizations*.dart`) a partir de los archivos `.arb`. Esas clases no se guardan en el repositorio.
 
 3. Abre un emulador o conecta un dispositivo y ejecuta la app:
 
@@ -88,11 +91,12 @@ flutter analyze
   - Agregar una tarea desde el diálogo.
   - El error del título.
   - Editar y eliminar desde el menú de la tarea.
+  - La interfaz en inglés, y el uso del inglés cuando el idioma del dispositivo no está soportado.
   - Los filtros y sus mensajes de vacío.
 
 ## Arquitectura
 
-El estado se maneja con **Bloc** (`flutter_bloc`), que es la única dependencia de la app. El código se organiza en tres capas, siguiendo una arquitectura limpia sencilla:
+El estado se maneja con **Bloc** (`flutter_bloc`). Las demás dependencias son `flutter_localizations` e `intl`, las oficiales de Flutter para traducciones. El código se organiza en tres capas, siguiendo una arquitectura limpia sencilla:
 
 | Capa | Contenido |
 |---|---|
@@ -113,15 +117,22 @@ Widget ──evento──▶ TasksBloc ──llama──▶ TaskRepository (en m
 - **Repositorio síncrono.** Con datos en memoria, `Future` y `await` solo añadirían ruido. Si se añadiera persistencia, el contrato `TaskRepository` es el único punto que cambiaría.
 - **La validación del título vive en un solo lugar.** Está en `Task.isValidTitle` y se aplica dos veces: el formulario muestra el error y el Bloc descarta cualquier título no válido, tanto al crear como al editar.
 - **Un solo diálogo para crear y editar** (`TaskTitleDialog`). Si recibe un título inicial, se comporta como edición.
+- **Todos los textos salen de `AppLocalizations`.** Se generan con `gen-l10n` a partir de los archivos `.arb` de `lib/l10n/`. El español (`app_es.arb`) es la plantilla y lleva la descripción de cada texto.
+- **Las tareas de ejemplo también se traducen.** Se crean al arrancar en `lib/sample_tasks.dart`, con el mismo idioma que elige `MaterialApp`. Así la capa `data/` no depende de las traducciones.
 - **Editar y eliminar desde un menú** en cada tarea, en lugar de gestos como deslizar. Así son fáciles de descubrir y tocar la casilla sigue sirviendo solo para completar.
 - **Las tareas nuevas aparecen al principio de la lista.** Si se agrega una con el filtro «Completadas» activo, la app cambia a «Todas» para que la tarea nueva se vea.
 
 ### Estructura
 
 ```
+l10n.yaml                            configuración de gen-l10n
 lib/
   main.dart                          crea el repositorio y arranca la app
-  app.dart                           MaterialApp, tema y BlocProvider
+  app.dart                           MaterialApp, tema, idiomas y BlocProvider
+  sample_tasks.dart                  tareas de ejemplo traducidas
+  l10n/
+    app_es.arb                       textos en español (plantilla)
+    app_en.arb                       textos en inglés
   domain/
     task.dart                        entidad Task y validación del título
     task_filter.dart                 enum TaskFilter
@@ -144,9 +155,15 @@ test/
   tasks_page_test.dart
 ```
 
+### Agregar un idioma
+
+1. Copia `lib/l10n/app_en.arb` como `app_<código>.arb`, por ejemplo `app_pt.arb`. Cambia `@@locale` y traduce los textos.
+2. Ejecuta `flutter pub get` o `flutter run`: el idioma nuevo se agrega solo a `AppLocalizations.supportedLocales`.
+3. Para iOS, añade el código del idioma a `CFBundleLocalizations` en `ios/Runner/Info.plist`.
+
 ## Limitaciones
 
 - Las tareas no se guardan entre sesiones.
 - Eliminar una tarea no se puede deshacer.
-- La interfaz está solo en español.
+- Las tareas de ejemplo se crean en el idioma que tiene el dispositivo al abrir la app. Si se cambia el idioma con la app abierta, la interfaz se traduce pero las tareas no, porque ya son datos del usuario.
 - Solo hay configuración para Android e iOS.

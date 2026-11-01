@@ -31,3 +31,6 @@ ios/Flutter/flutter_export_environment.sh
 ios/Pods/
 **/xcuserdata/
 ios/Runner/GeneratedPluginRegistrant.*
+
+# Localizaciones generadas por `flutter pub get` a partir de los .arb
+lib/l10n/app_localizations*.dart

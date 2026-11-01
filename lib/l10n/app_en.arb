@@ -1,0 +1,36 @@
+{
+  "@@locale": "en",
+
+  "appTitle": "Aura",
+
+  "filterAll": "All",
+  "filterPending": "Pending",
+  "filterCompleted": "Completed",
+
+  "emptyAllTitle": "You have no tasks",
+  "emptyAllHint": "Add one with the “New task” button.",
+  "emptyPendingTitle": "No pending tasks",
+  "emptyPendingHint": "You're all caught up!",
+  "emptyCompletedTitle": "You haven't completed any tasks yet",
+  "emptyCompletedHint": "Check off a task to see it here.",
+
+  "newTaskButton": "New task",
+  "newTaskDialogTitle": "New task",
+  "editTaskDialogTitle": "Edit task",
+  "taskTitleLabel": "Title",
+  "taskTitleHint": "E.g. Call the dentist",
+  "taskTitleRequired": "Enter a title for the task.",
+  "cancelAction": "Cancel",
+  "addAction": "Add",
+  "saveAction": "Save",
+
+  "taskOptionsTooltip": "Task options",
+  "editAction": "Edit",
+  "deleteAction": "Delete",
+  "taskDeletedMessage": "Deleted “{title}”.",
+
+  "sampleTask1": "Prepare Monday's presentation",
+  "sampleTask2": "Buy bread and milk",
+  "sampleTask3": "Go for a 30-minute walk",
+  "sampleTask4": "Pay the electricity bill"
+}

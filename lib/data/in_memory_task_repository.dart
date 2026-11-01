@@ -3,24 +3,12 @@ import '../domain/task_repository.dart';
 
 /// Guarda las tareas en memoria: se pierden al cerrar la app.
 class InMemoryTaskRepository implements TaskRepository {
-  InMemoryTaskRepository({List<Task> initialTasks = sampleTasks})
+  InMemoryTaskRepository({List<Task> initialTasks = const []})
     : _tasks = List.of(initialTasks);
-
-  /// Tareas de ejemplo con las que arranca la app.
-  static const sampleTasks = [
-    Task(id: 'sample-1', title: 'Preparar la presentación del lunes'),
-    Task(id: 'sample-2', title: 'Comprar pan y leche'),
-    Task(id: 'sample-3', title: 'Salir a caminar 30 minutos'),
-    Task(
-      id: 'sample-4',
-      title: 'Pagar la factura de la luz',
-      isCompleted: true,
-    ),
-  ];
 
   final List<Task> _tasks;
 
-  // Prefijo distinto al de los ejemplos para que los ids nunca choquen.
+  // Prefijo distinto al de los ejemplos ('sample-') para que los ids no choquen.
   int _nextId = 1;
 
   @override

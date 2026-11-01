@@ -1,0 +1,123 @@
+{
+  "@@locale": "es",
+
+  "appTitle": "Aura",
+  "@appTitle": {
+    "description": "Nombre de la app, en la barra superior y en el sistema."
+  },
+
+  "filterAll": "Todas",
+  "@filterAll": {
+    "description": "Filtro que muestra todas las tareas."
+  },
+  "filterPending": "Pendientes",
+  "@filterPending": {
+    "description": "Filtro que muestra las tareas sin completar."
+  },
+  "filterCompleted": "Completadas",
+  "@filterCompleted": {
+    "description": "Filtro que muestra las tareas completadas."
+  },
+
+  "emptyAllTitle": "No tienes tareas",
+  "@emptyAllTitle": {
+    "description": "Título cuando no hay ninguna tarea."
+  },
+  "emptyAllHint": "Agrega una con el botón «Nueva tarea».",
+  "@emptyAllHint": {
+    "description": "Ayuda cuando no hay ninguna tarea."
+  },
+  "emptyPendingTitle": "No tienes tareas pendientes",
+  "@emptyPendingTitle": {
+    "description": "Título cuando el filtro Pendientes está vacío."
+  },
+  "emptyPendingHint": "¡Estás al día!",
+  "@emptyPendingHint": {
+    "description": "Ayuda cuando el filtro Pendientes está vacío."
+  },
+  "emptyCompletedTitle": "Aún no has completado ninguna tarea",
+  "@emptyCompletedTitle": {
+    "description": "Título cuando el filtro Completadas está vacío."
+  },
+  "emptyCompletedHint": "Marca una tarea para verla aquí.",
+  "@emptyCompletedHint": {
+    "description": "Ayuda cuando el filtro Completadas está vacío."
+  },
+
+  "newTaskButton": "Nueva tarea",
+  "@newTaskButton": {
+    "description": "Botón flotante para agregar una tarea."
+  },
+  "newTaskDialogTitle": "Nueva tarea",
+  "@newTaskDialogTitle": {
+    "description": "Título del diálogo para crear una tarea."
+  },
+  "editTaskDialogTitle": "Editar tarea",
+  "@editTaskDialogTitle": {
+    "description": "Título del diálogo para editar una tarea."
+  },
+  "taskTitleLabel": "Título",
+  "@taskTitleLabel": {
+    "description": "Etiqueta del campo del título."
+  },
+  "taskTitleHint": "Ej.: Llamar al dentista",
+  "@taskTitleHint": {
+    "description": "Ejemplo dentro del campo del título."
+  },
+  "taskTitleRequired": "Escribe un título para la tarea.",
+  "@taskTitleRequired": {
+    "description": "Error cuando el título está vacío o tiene solo espacios."
+  },
+  "cancelAction": "Cancelar",
+  "@cancelAction": {
+    "description": "Botón para cerrar el diálogo sin guardar."
+  },
+  "addAction": "Agregar",
+  "@addAction": {
+    "description": "Botón para crear la tarea."
+  },
+  "saveAction": "Guardar",
+  "@saveAction": {
+    "description": "Botón para guardar los cambios de una tarea."
+  },
+
+  "taskOptionsTooltip": "Opciones de la tarea",
+  "@taskOptionsTooltip": {
+    "description": "Descripción del botón de menú de cada tarea."
+  },
+  "editAction": "Editar",
+  "@editAction": {
+    "description": "Opción del menú para editar la tarea."
+  },
+  "deleteAction": "Eliminar",
+  "@deleteAction": {
+    "description": "Opción del menú para eliminar la tarea."
+  },
+  "taskDeletedMessage": "Se eliminó «{title}».",
+  "@taskDeletedMessage": {
+    "description": "Aviso que confirma que se eliminó una tarea.",
+    "placeholders": {
+      "title": {
+        "type": "String",
+        "example": "Comprar pan"
+      }
+    }
+  },
+
+  "sampleTask1": "Preparar la presentación del lunes",
+  "@sampleTask1": {
+    "description": "Tarea de ejemplo."
+  },
+  "sampleTask2": "Comprar pan y leche",
+  "@sampleTask2": {
+    "description": "Tarea de ejemplo."
+  },
+  "sampleTask3": "Salir a caminar 30 minutos",
+  "@sampleTask3": {
+    "description": "Tarea de ejemplo."
+  },
+  "sampleTask4": "Pagar la factura de la luz",
+  "@sampleTask4": {
+    "description": "Tarea de ejemplo, ya completada."
+  }
+}

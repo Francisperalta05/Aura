@@ -1,24 +1,54 @@
 import 'package:aura/app.dart';
 import 'package:aura/data/in_memory_task_repository.dart';
 import 'package:aura/domain/task.dart';
+import 'package:aura/l10n/app_localizations.dart';
+import 'package:aura/sample_tasks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-Widget buildApp({List<Task> tasks = const []}) {
-  return AuraApp(taskRepository: InMemoryTaskRepository(initialTasks: tasks));
+/// Abre la app con el dispositivo en [locale] (español, salvo que se indique).
+Future<void> pumpApp(
+  WidgetTester tester, {
+  List<Task> tasks = const [],
+  Locale locale = const Locale('es'),
+}) async {
+  tester.platformDispatcher.localesTestValue = [locale];
+  addTearDown(tester.platformDispatcher.clearLocalesTestValue);
+
+  await tester.pumpWidget(
+    AuraApp(taskRepository: InMemoryTaskRepository(initialTasks: tasks)),
+  );
 }
 
 void main() {
   testWidgets('muestra las tareas de ejemplo al abrir', (tester) async {
-    await tester.pumpWidget(AuraApp(taskRepository: InMemoryTaskRepository()));
+    final sampleTasks = buildSampleTasks(
+      lookupAppLocalizations(const Locale('es')),
+    );
+    await pumpApp(tester, tasks: sampleTasks);
 
-    for (final task in InMemoryTaskRepository.sampleTasks) {
+    for (final task in sampleTasks) {
       expect(find.text(task.title), findsOneWidget);
     }
   });
 
+  testWidgets('usa inglés si el dispositivo está en inglés', (tester) async {
+    await pumpApp(tester, locale: const Locale('en'));
+
+    expect(find.text('All'), findsOneWidget);
+    expect(find.text('Pending'), findsOneWidget);
+    expect(find.text('New task'), findsOneWidget);
+    expect(find.text('You have no tasks'), findsOneWidget);
+  });
+
+  testWidgets('usa inglés si el idioma no está soportado', (tester) async {
+    await pumpApp(tester, locale: const Locale('fr'));
+
+    expect(find.text('You have no tasks'), findsOneWidget);
+  });
+
   testWidgets('agrega una tarea desde el diálogo', (tester) async {
-    await tester.pumpWidget(buildApp());
+    await pumpApp(tester);
     expect(find.text('No tienes tareas'), findsOneWidget);
 
     await tester.tap(find.byType(FloatingActionButton));
@@ -32,7 +62,7 @@ void main() {
   });
 
   testWidgets('no acepta un título con solo espacios', (tester) async {
-    await tester.pumpWidget(buildApp());
+    await pumpApp(tester);
 
     await tester.tap(find.byType(FloatingActionButton));
     await tester.pumpAndSettle();
@@ -45,10 +75,9 @@ void main() {
   });
 
   testWidgets('edita una tarea desde su menú', (tester) async {
-    await tester.pumpWidget(
-      buildApp(
-        tasks: const [Task(id: '1', title: 'Leer')],
-      ),
+    await pumpApp(
+      tester,
+      tasks: const [Task(id: '1', title: 'Leer')],
     );
 
     await tester.tap(find.byTooltip('Opciones de la tarea'));
@@ -66,10 +95,9 @@ void main() {
   });
 
   testWidgets('elimina una tarea desde su menú', (tester) async {
-    await tester.pumpWidget(
-      buildApp(
-        tasks: const [Task(id: '1', title: 'Leer')],
-      ),
+    await pumpApp(
+      tester,
+      tasks: const [Task(id: '1', title: 'Leer')],
     );
 
     await tester.tap(find.byTooltip('Opciones de la tarea'));
@@ -82,10 +110,9 @@ void main() {
   });
 
   testWidgets('marca una tarea y la muestra en Completadas', (tester) async {
-    await tester.pumpWidget(
-      buildApp(
-        tasks: const [Task(id: '1', title: 'Hacer ejercicio')],
-      ),
+    await pumpApp(
+      tester,
+      tasks: const [Task(id: '1', title: 'Hacer ejercicio')],
     );
 
     await tester.tap(find.text('Completadas'));

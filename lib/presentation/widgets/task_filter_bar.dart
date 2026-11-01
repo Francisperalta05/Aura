@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../domain/task_filter.dart';
+import '../../l10n/app_localizations.dart';
 import '../bloc/tasks_bloc.dart';
 import '../bloc/tasks_event.dart';
 
@@ -10,6 +11,7 @@ class TaskFilterBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final filter = context.select((TasksBloc bloc) => bloc.state.filter);
 
     return SizedBox(
@@ -17,7 +19,7 @@ class TaskFilterBar extends StatelessWidget {
       child: SegmentedButton<TaskFilter>(
         segments: [
           for (final option in TaskFilter.values)
-            ButtonSegment(value: option, label: Text(option.label)),
+            ButtonSegment(value: option, label: Text(option.label(l10n))),
         ],
         selected: {filter},
         showSelectedIcon: false,
@@ -30,9 +32,9 @@ class TaskFilterBar extends StatelessWidget {
 }
 
 extension on TaskFilter {
-  String get label => switch (this) {
-    TaskFilter.all => 'Todas',
-    TaskFilter.pending => 'Pendientes',
-    TaskFilter.completed => 'Completadas',
+  String label(AppLocalizations l10n) => switch (this) {
+    TaskFilter.all => l10n.filterAll,
+    TaskFilter.pending => l10n.filterPending,
+    TaskFilter.completed => l10n.filterCompleted,
   };
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/task_filter.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Lo que se muestra cuando el filtro seleccionado no tiene tareas.
 class EmptyTasksMessage extends StatelessWidget {
@@ -11,21 +12,22 @@ class EmptyTasksMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context);
     final (icon, title, hint) = switch (filter) {
       TaskFilter.all => (
         Icons.inbox_outlined,
-        'No tienes tareas',
-        'Agrega una con el botón «Nueva tarea».',
+        l10n.emptyAllTitle,
+        l10n.emptyAllHint,
       ),
       TaskFilter.pending => (
         Icons.celebration_outlined,
-        'No tienes tareas pendientes',
-        '¡Estás al día!',
+        l10n.emptyPendingTitle,
+        l10n.emptyPendingHint,
       ),
       TaskFilter.completed => (
         Icons.task_alt,
-        'Aún no has completado ninguna tarea',
-        'Marca una tarea para verla aquí.',
+        l10n.emptyCompletedTitle,
+        l10n.emptyCompletedHint,
       ),
     };
 

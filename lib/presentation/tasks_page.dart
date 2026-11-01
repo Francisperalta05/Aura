@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../domain/task.dart';
+import '../l10n/app_localizations.dart';
 import 'bloc/tasks_bloc.dart';
 import 'bloc/tasks_event.dart';
 import 'bloc/tasks_state.dart';
@@ -27,15 +28,18 @@ class TasksPage extends StatelessWidget {
 
   void _deleteTask(BuildContext context, Task task) {
     context.read<TasksBloc>().add(TaskDeleted(task.id));
+    final message = AppLocalizations.of(context).taskDeletedMessage(task.title);
     ScaffoldMessenger.of(context)
       ..hideCurrentSnackBar()
-      ..showSnackBar(SnackBar(content: Text('Se eliminó «${task.title}».')));
+      ..showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Aura')),
+      appBar: AppBar(title: Text(l10n.appTitle)),
       body: Column(
         children: [
           const Padding(
@@ -74,7 +78,7 @@ class TasksPage extends StatelessWidget {
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => _addTask(context),
         icon: const Icon(Icons.add),
-        label: const Text('Nueva tarea'),
+        label: Text(l10n.newTaskButton),
       ),
     );
   }

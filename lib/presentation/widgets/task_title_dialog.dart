@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/task.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Abre el diálogo para crear una tarea o, si recibe [initialTitle], para
 /// editarla. Devuelve el título ya recortado, o `null` si se cancela.
@@ -44,8 +45,12 @@ class _TaskTitleDialogState extends State<TaskTitleDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
+
     return AlertDialog(
-      title: Text(widget.isEditing ? 'Editar tarea' : 'Nueva tarea'),
+      title: Text(
+        widget.isEditing ? l10n.editTaskDialogTitle : l10n.newTaskDialogTitle,
+      ),
       content: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -54,24 +59,23 @@ class _TaskTitleDialogState extends State<TaskTitleDialog> {
           autofocus: true,
           textCapitalization: TextCapitalization.sentences,
           textInputAction: TextInputAction.done,
-          decoration: const InputDecoration(
-            labelText: 'Título',
-            hintText: 'Ej.: Llamar al dentista',
+          decoration: InputDecoration(
+            labelText: l10n.taskTitleLabel,
+            hintText: l10n.taskTitleHint,
           ),
-          validator: (value) => Task.isValidTitle(value ?? '')
-              ? null
-              : 'Escribe un título para la tarea.',
+          validator: (value) =>
+              Task.isValidTitle(value ?? '') ? null : l10n.taskTitleRequired,
           onFieldSubmitted: (_) => _submit(),
         ),
       ),
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Cancelar'),
+          child: Text(l10n.cancelAction),
         ),
         FilledButton(
           onPressed: _submit,
-          child: Text(widget.isEditing ? 'Guardar' : 'Agregar'),
+          child: Text(widget.isEditing ? l10n.saveAction : l10n.addAction),
         ),
       ],
     );
