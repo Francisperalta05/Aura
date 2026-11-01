@@ -12,6 +12,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       super(TasksState(tasks: repository.getTasks())) {
     on<TaskAdded>(_onTaskAdded);
     on<TaskToggled>(_onTaskToggled);
+    on<TaskTitleEdited>(_onTaskTitleEdited);
+    on<TaskDeleted>(_onTaskDeleted);
     on<TaskFilterChanged>(_onFilterChanged);
   }
 
@@ -35,6 +37,18 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
   void _onTaskToggled(TaskToggled event, Emitter<TasksState> emit) {
     _repository.toggleTask(event.id);
+    emit(state.copyWith(tasks: _repository.getTasks()));
+  }
+
+  void _onTaskTitleEdited(TaskTitleEdited event, Emitter<TasksState> emit) {
+    if (!Task.isValidTitle(event.title)) return;
+
+    _repository.updateTaskTitle(event.id, event.title.trim());
+    emit(state.copyWith(tasks: _repository.getTasks()));
+  }
+
+  void _onTaskDeleted(TaskDeleted event, Emitter<TasksState> emit) {
+    _repository.deleteTask(event.id);
     emit(state.copyWith(tasks: _repository.getTasks()));
   }
 

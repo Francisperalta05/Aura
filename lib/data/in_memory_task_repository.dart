@@ -34,10 +34,24 @@ class InMemoryTaskRepository implements TaskRepository {
 
   @override
   void toggleTask(String id) {
+    _update(id, (task) => task.copyWith(isCompleted: !task.isCompleted));
+  }
+
+  @override
+  void updateTaskTitle(String id, String title) {
+    _update(id, (task) => task.copyWith(title: title));
+  }
+
+  @override
+  void deleteTask(String id) {
+    _tasks.removeWhere((task) => task.id == id);
+  }
+
+  /// Reemplaza la tarea con ese id; si no existe, no hace nada.
+  void _update(String id, Task Function(Task task) change) {
     final index = _tasks.indexWhere((task) => task.id == id);
     if (index == -1) return;
 
-    final task = _tasks[index];
-    _tasks[index] = task.copyWith(isCompleted: !task.isCompleted);
+    _tasks[index] = change(_tasks[index]);
   }
 }

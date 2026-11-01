@@ -11,4 +11,8 @@ abstract interface class TaskRepository {
 
   /// Cambia la tarea entre completada y pendiente.
   void toggleTask(String id);
+
+  void updateTaskTitle(String id, String title);
+
+  void deleteTask(String id);
 }

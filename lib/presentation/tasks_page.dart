@@ -1,21 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../domain/task.dart';
 import 'bloc/tasks_bloc.dart';
 import 'bloc/tasks_event.dart';
 import 'bloc/tasks_state.dart';
-import 'widgets/add_task_dialog.dart';
 import 'widgets/empty_tasks_message.dart';
 import 'widgets/task_filter_bar.dart';
 import 'widgets/task_tile.dart';
+import 'widgets/task_title_dialog.dart';
 
 class TasksPage extends StatelessWidget {
   const TasksPage({super.key});
 
   Future<void> _addTask(BuildContext context) async {
-    final title = await showAddTaskDialog(context);
+    final title = await showTaskTitleDialog(context);
     if (title == null || !context.mounted) return;
     context.read<TasksBloc>().add(TaskAdded(title));
+  }
+
+  Future<void> _editTask(BuildContext context, Task task) async {
+    final title = await showTaskTitleDialog(context, initialTitle: task.title);
+    if (title == null || !context.mounted) return;
+    context.read<TasksBloc>().add(TaskTitleEdited(task.id, title));
+  }
+
+  void _deleteTask(BuildContext context, Task task) {
+    context.read<TasksBloc>().add(TaskDeleted(task.id));
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text('Se eliminó «${task.title}».')));
   }
 
   @override
@@ -47,6 +61,8 @@ class TasksPage extends StatelessWidget {
                       task: task,
                       onToggle: () =>
                           context.read<TasksBloc>().add(TaskToggled(task.id)),
+                      onEdit: () => _editTask(context, task),
+                      onDelete: () => _deleteTask(context, task),
                     );
                   },
                 );

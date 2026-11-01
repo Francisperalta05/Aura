@@ -16,6 +16,19 @@ final class TaskToggled extends TasksEvent {
   final String id;
 }
 
+final class TaskTitleEdited extends TasksEvent {
+  const TaskTitleEdited(this.id, this.title);
+
+  final String id;
+  final String title;
+}
+
+final class TaskDeleted extends TasksEvent {
+  const TaskDeleted(this.id);
+
+  final String id;
+}
+
 final class TaskFilterChanged extends TasksEvent {
   const TaskFilterChanged(this.filter);
 

@@ -57,6 +57,27 @@ void main() {
     expect(bloc.state.tasks.first.isCompleted, isFalse);
   });
 
+  test('edita el título de una tarea, recortado', () async {
+    bloc.add(const TaskTitleEdited('a', '  Renombrada  '));
+    await settle();
+
+    expect(bloc.state.tasks.first.title, 'Renombrada');
+  });
+
+  test('no cambia el título si el nuevo está en blanco', () async {
+    bloc.add(const TaskTitleEdited('a', '   '));
+    await settle();
+
+    expect(bloc.state.tasks.first.title, 'Pendiente');
+  });
+
+  test('elimina una tarea', () async {
+    bloc.add(const TaskDeleted('a'));
+    await settle();
+
+    expect(bloc.state.tasks.map((task) => task.id), ['b']);
+  });
+
   test('cada filtro muestra solo sus tareas', () async {
     bloc.add(const TaskFilterChanged(TaskFilter.pending));
     await settle();

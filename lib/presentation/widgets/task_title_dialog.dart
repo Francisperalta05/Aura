@@ -2,24 +2,34 @@ import 'package:flutter/material.dart';
 
 import '../../domain/task.dart';
 
-/// Abre el diálogo y devuelve el título ya recortado, o `null` si se cancela.
-Future<String?> showAddTaskDialog(BuildContext context) {
+/// Abre el diálogo para crear una tarea o, si recibe [initialTitle], para
+/// editarla. Devuelve el título ya recortado, o `null` si se cancela.
+Future<String?> showTaskTitleDialog(
+  BuildContext context, {
+  String? initialTitle,
+}) {
   return showDialog<String>(
     context: context,
-    builder: (_) => const AddTaskDialog(),
+    builder: (_) => TaskTitleDialog(initialTitle: initialTitle),
   );
 }
 
-class AddTaskDialog extends StatefulWidget {
-  const AddTaskDialog({super.key});
+class TaskTitleDialog extends StatefulWidget {
+  const TaskTitleDialog({super.key, this.initialTitle});
+
+  final String? initialTitle;
+
+  bool get isEditing => initialTitle != null;
 
   @override
-  State<AddTaskDialog> createState() => _AddTaskDialogState();
+  State<TaskTitleDialog> createState() => _TaskTitleDialogState();
 }
 
-class _AddTaskDialogState extends State<AddTaskDialog> {
+class _TaskTitleDialogState extends State<TaskTitleDialog> {
   final _formKey = GlobalKey<FormState>();
-  final _titleController = TextEditingController();
+  late final _titleController = TextEditingController(
+    text: widget.initialTitle,
+  );
 
   @override
   void dispose() {
@@ -35,7 +45,7 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('Nueva tarea'),
+      title: Text(widget.isEditing ? 'Editar tarea' : 'Nueva tarea'),
       content: Form(
         key: _formKey,
         autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -59,7 +69,10 @@ class _AddTaskDialogState extends State<AddTaskDialog> {
           onPressed: () => Navigator.of(context).pop(),
           child: const Text('Cancelar'),
         ),
-        FilledButton(onPressed: _submit, child: const Text('Agregar')),
+        FilledButton(
+          onPressed: _submit,
+          child: Text(widget.isEditing ? 'Guardar' : 'Agregar'),
+        ),
       ],
     );
   }

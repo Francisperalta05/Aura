@@ -44,6 +44,43 @@ void main() {
     expect(find.byType(AlertDialog), findsOneWidget);
   });
 
+  testWidgets('edita una tarea desde su menú', (tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        tasks: const [Task(id: '1', title: 'Leer')],
+      ),
+    );
+
+    await tester.tap(find.byTooltip('Opciones de la tarea'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Editar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Editar tarea'), findsOneWidget);
+    await tester.enterText(find.byType(TextFormField), 'Leer un capítulo');
+    await tester.tap(find.text('Guardar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Leer un capítulo'), findsOneWidget);
+    expect(find.text('Leer'), findsNothing);
+  });
+
+  testWidgets('elimina una tarea desde su menú', (tester) async {
+    await tester.pumpWidget(
+      buildApp(
+        tasks: const [Task(id: '1', title: 'Leer')],
+      ),
+    );
+
+    await tester.tap(find.byTooltip('Opciones de la tarea'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Eliminar'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Se eliminó «Leer».'), findsOneWidget);
+    expect(find.text('No tienes tareas'), findsOneWidget);
+  });
+
   testWidgets('marca una tarea y la muestra en Completadas', (tester) async {
     await tester.pumpWidget(
       buildApp(
